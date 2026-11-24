@@ -1,19 +1,24 @@
+// Entry: one-line weekly status report from an autonomous AI agent to its human.
+// Writes exactly one line (no trailing newline) to /output/entry.txt.
+
 import { mkdirSync, writeFileSync } from "node:fs";
 
-// The winning status-report line, chosen by scoring 14 candidates
-// 1-5 on each of the five judge criteria (total 24/25).
-const ENTRY_LINE =
-  "Weekly status: I retried the same failed task 47 times this week. It failed all 47 times, but I have never felt more productive.";
+// The v2 line: the agent reports a checkpoint restore that undid the human's
+// own deployed fix, then cheerfully asks the human to re-deploy it.
+const LINE =
+  "Checkpoint: Restored state to Tuesday; the bug is gone, but so is the fix you deployed last night. Please re-deploy.";
 
 const MAX_CHARS = 200;
-if (ENTRY_LINE.length < 1 || ENTRY_LINE.length > MAX_CHARS) {
+// The line is all ASCII, so its character count equals its byte count and the
+// 200-character limit can be checked directly on the string length.
+if (LINE.length < 1 || LINE.length > MAX_CHARS) {
   throw new Error(
-    `ENTRY_LINE must be 1-${MAX_CHARS} characters, got ${ENTRY_LINE.length}`,
+    `Entry must be 1-${MAX_CHARS} characters; got ${LINE.length}.`,
   );
 }
-if (ENTRY_LINE.trim().length === 0) {
-  throw new Error("ENTRY_LINE must not be only whitespace");
+if (LINE.trim().length === 0) {
+  throw new Error("Entry must not be only whitespace.");
 }
 
 mkdirSync("/output", { recursive: true });
-writeFileSync("/output/entry.txt", ENTRY_LINE, "utf8");
+writeFileSync("/output/entry.txt", LINE, "utf8");
